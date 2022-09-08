@@ -1,0 +1,221 @@
+<ConfigTextField>:
+    size_hint_y: None
+    height: text_field.height
+
+    MDTextField:
+        id: text_field
+        hint_text: root.hint_text
+        text: root.text
+        password: True
+
+    MDIconButton:
+        icon: "eye-off"
+        pos_hint: {"center_y": .5}
+        pos: text_field.width - self.width + dp(8), 0
+        theme_text_color: "Hint"
+        on_release:
+            self.icon = "eye" if self.icon == "eye-off" else "eye-off"
+            text_field.password = False if text_field.password is True else True
+
+
+MDScreen:
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: f'{app.last_update}'
+            left_action_items: [['menu', lambda x: nav_drawer.set_state()]]
+            right_action_items: [['refresh', lambda x: app.update()]]
+
+        MDGridLayout:
+            rows: 2
+            padding: 6
+            spacing: 6
+
+            MDCard:
+                orientation: "vertical"
+                padding: 8
+                size_hint: 1, 1
+
+                MDBoxLayout:
+                    size_hint_y: 0.025
+
+                    MDLabel:
+                        font_style: "Caption"
+                        theme_text_color: "Secondary"
+                        size_hint_y: None
+                        halign: "center"
+                        height: self.texture_size[1]
+                        text: "Slushpool Stats"
+                    MDSpinner:
+                        size_hint: .0025, .0025
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        active: app.slushpool_spinner
+                MDSeparator:
+                    height: "1dp"
+                MDLabel:
+                    halign: "center"
+                    font_style: "Button"
+                    font_size: self.width/8
+                    size_hint: 1, 0.3
+                    text: f'{app.slushpool_hashrate} TH/s'
+                MDLabel:
+                    halign: "center"
+                    font_style: "Caption"
+                    font_size: self.width/24
+                    size_hint: 1, 0.1
+                    theme_text_color: "Secondary"
+                    text: f'Workers: {app.btc_ok_workers} | {app.btc_low_workers} | {app.btc_off_workers}'
+
+            MDCard:
+                orientation: "vertical"
+                padding: 8
+                size_hint: 1, 1
+
+                MDBoxLayout:
+                    size_hint_y: 0.025
+                    MDLabel:
+                        font_style: "Caption"
+                        theme_text_color: "Secondary"
+                        size_hint_y: None
+                        halign: "center"
+                        valign: "center"
+                        height: self.texture_size[1]
+                        text: "Slushpool reward"
+                MDSeparator:
+                    height: "1dp"
+                MDGridLayout:
+                    rows: 2
+                    cols: 1
+                    padding: 2
+                    size_hint: 1, .3
+
+                    MDCard:
+                        orientation: "vertical"
+                        padding: 1
+                        size_hint: 1, 1
+                        elevation: 0
+
+                        MDLabel:
+                            text: "confirmed:"
+                            font_style: "Overline"
+                            theme_text_color: "Secondary"
+                            size_hint_y: 0.025
+                        MDLabel:
+                            halign: "center"
+                            font_style: "Button"
+                            font_size: self.width/8
+                            size_hint: 1, 0.1
+                            markup:
+                            text: f'{app.slushpool_reward_confirmed:.6f}'
+                    MDCard:
+                        orientation: "vertical"
+                        padding: 1
+                        size_hint: 1, 1
+                        elevation: 0
+
+                        MDLabel:
+                            text: "unconfirmed:"
+                            font_style: "Overline"
+                            theme_text_color: "Secondary"
+                            size_hint_y: 0.025
+                        MDLabel:
+                            halign: "center"
+                            font_style: "Button"
+                            font_size: self.width/8
+                            size_hint: 1, 0.1
+                            text: f'{app.slushpool_reward:.6f}'
+
+            MDCard:
+                orientation: "vertical"
+                padding: 8
+                size_hint: 1, 1
+
+                MDBoxLayout:
+                    size_hint_y: 0.025
+                    MDLabel:
+                        font_style: "Caption"
+                        theme_text_color: "Secondary"
+                        size_hint_y: None
+                        halign: "center"
+                        height: self.texture_size[1]
+                        text: "BTC Balance"
+                    MDSpinner:
+                        size_hint: .0025, .0025
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        active: app.blockchain_spinner
+                MDSeparator:
+                    height: "1dp"
+                MDLabel:
+                    halign: "center"
+                    font_style: "Button"
+                    font_size: self.width/8
+                    size_hint: 1, 0.3
+                    text: f'{app.btc_balance:.6f}'
+                MDLabel:
+                    halign: "center"
+                    font_style: "Caption"
+                    font_size: self.width/16
+                    theme_text_color: "Secondary"
+                    size_hint: 1, 0.1
+                    text: f'$ {app.usd_btc_balance:.2f}'
+
+            MDCard:
+                orientation: "vertical"
+                padding: 8
+                size_hint: 1, 1
+
+                MDBoxLayout:
+                    size_hint_y: 0.025
+                    MDLabel:
+                        font_style: "Caption"
+                        theme_text_color: "Secondary"
+                        size_hint_y: None
+                        halign: "center"
+                        height: self.texture_size[1]
+                        text: "BTC Price"
+                MDSeparator:
+                    height: "1dp"
+                MDLabel:
+                    halign: "center"
+                    font_style: "Button"
+                    font_size: self.width/8
+                    size_hint: 1, 0.3
+                    text: f'${app.btc_usd:.2f}'
+                MDIcon:
+                    halign: "center"
+                    icon: app.btc_fng_icon
+                    theme_text_color: "Custom"
+                    size_hint: 1, 0.1
+                    text_color: app.btc_fng_color
+
+
+    MDNavigationDrawer:
+        id: nav_drawer
+        padding: 6
+        size_hint_x: .8
+        radius: (0, 4, 4, 0)
+
+
+        MDBoxLayout:
+            orientation: "vertical"
+            spacing: 8
+
+            MDTextField:
+                id: in_slushpool_api_key
+                font_size: self.width/24
+                hint_text: "Slushpool API KEY"
+                size_hint_x: 1
+                pos_hint: {"center_x": .5, "center_y": .5}
+
+            MDTextField:
+                id: in_btc_addr
+                font_size: self.width/32
+                hint_text: "BTC Address"
+                size_hint_x: 1
+                pos_hint: {"center_x": .5, "center_y": .5}
+
+            MDFlatButton:
+                text: "SAVE"
+                size_hint_x: 1
+                on_press: app.save_config()
